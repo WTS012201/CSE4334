@@ -2,18 +2,20 @@ import torch
 import torch.nn as nn
 
 class CNN(nn.Module):
-    def __init__(self, img_d, channels_d, features_d):
+    def __init__(self, img_d=640, features_d=6):
         super().__init__()
+        self.img_d = img_d
+        self.features_d = features_d
         self.seq = nn.Sequential(
-            nn.Conv2d(channels_d, features_d, kernel_size=5, padding=2),
+            nn.Conv2d(3, self.features_d, kernel_size=5, padding=2),
             nn.ReLU(),
             nn.MaxPool2d(2, 2),
-            nn.Conv2d(features_d, features_d*3, kernel_size=5, stride=1, padding=2),
+            nn.Conv2d(self.features_d, self.features_d*3, kernel_size=5, padding=2),
             nn.ReLU(),
             nn.MaxPool2d(2, 2),
             nn.Flatten(1),
             # (1/2 * 1/2 * img_d) * (1/2 * 1/2 * img_d)
-            self._block(features_d * 3 *(img_d ** 2 // 16), 128),
+            self._block(self.features_d * 3 *(self.img_d ** 2 // 16), 128),
             self._block(128, 64),
             self._block(64, 3),
         )

@@ -1,3 +1,4 @@
 input
 *.csv
+*.pth
 __pycache__
