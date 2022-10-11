@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 class CNN(nn.Module):
-    def __init__(self, img_d=640, features_d=6):
+    def __init__(self, img_d=400, features_d=6):
         super().__init__()
         self.img_d = img_d
         self.features_d = features_d
@@ -15,7 +15,7 @@ class CNN(nn.Module):
             nn.MaxPool2d(2, 2),
             nn.Flatten(1),
             # (1/2 * 1/2 * img_d) * (1/2 * 1/2 * img_d)
-            self._block(self.features_d * 3 *(self.img_d ** 2 // 16), 128),
+            self._block(((img_d // 4) ** 2) * 3 * features_d, 128),
             self._block(128, 64),
             self._block(64, 3),
         )
