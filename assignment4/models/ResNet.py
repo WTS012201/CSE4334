@@ -66,13 +66,10 @@ class ResNet152(nn.Module):
 
     def _gen_layer(self, n_res_blocks, out_channels, stride):
         layers = []
-        identity_downsample = nn.Sequential(
-            nn.Conv2d(self.in_channels, out_channels * 4, 1, stride),
-            nn.BatchNorm2d(out_channels * 4),
-        )
+        down_sample = ConvBlock(self.in_channels, out_channels * 4, 1, stride)
 
         layers.append(
-            ResBlock(self.in_channels, out_channels, identity_downsample, stride)
+            ResBlock(self.in_channels, out_channels, down_sample, stride)
         )
         self.in_channels = out_channels * 4
 
